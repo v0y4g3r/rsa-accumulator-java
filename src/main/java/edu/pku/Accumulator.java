@@ -60,35 +60,32 @@ public class Accumulator {
         }
     }
 
-    @SuppressWarnings("all")
     public BigInteger proveMembership(BigInteger x) {
         if (!data.containsKey(x)) {
             return null;
         } else {
-            BigInteger product = BigInteger.ONE;
-            for (BigInteger k : data.keySet()) {
-                if (k.compareTo(x) != 0) {
-                    BigInteger v = data.get(k);
-                    product = product.multiply(Util.hashToPrime(k, ACCUMULATED_PRIME_SIZE, v).getFrist());
-                }
-            }
+            BigInteger product = iterateAndGetProduct(x);
             return A0.modPow(product, N);
         }
     }
 
-    @SuppressWarnings("all")
+    private BigInteger iterateAndGetProduct(BigInteger x) {
+        BigInteger product = BigInteger.ONE;
+        for (BigInteger k : data.keySet()) {
+            if (k.compareTo(x) != 0) {
+                BigInteger v = data.get(k);
+                product = product.multiply(Util.hashToPrime(k, ACCUMULATED_PRIME_SIZE, v).getFrist());
+            }
+        }
+        return product;
+    }
+
     public BigInteger delete(BigInteger x) {
         if (!data.containsKey(x)) {
             return A;
         } else {
             data.remove(x);
-            BigInteger product = BigInteger.ONE;
-            for (BigInteger k : data.keySet()) {
-                if (k.compareTo(x) != 0) {
-                    BigInteger v = data.get(k);
-                    product = product.multiply(Util.hashToPrime(k, ACCUMULATED_PRIME_SIZE, v).getFrist());
-                }
-            }
+            final BigInteger product = iterateAndGetProduct(x);
             this.A = A0.modPow(product, N);
             return A;
         }
