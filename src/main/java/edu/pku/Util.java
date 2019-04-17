@@ -37,6 +37,15 @@ public class Util {
         return hashToPrime(x, 120, BigInteger.ZERO);
     }
 
+    /**
+     * hash x to a prime and get nonce, thus x+nonce will be a large prime with certainty PRIME_CERTAINTY
+     *
+     * @param x         big int to hash
+     * @param bitLength required bit length
+     * @param initNonce initial nonce value
+     * @return hash
+     * @author Lei, HUANG (lhuang@pku.edu.cn): 2019-04-17 22:42:00
+     */
     public static Pair<BigInteger> hashToPrime(BigInteger x, int bitLength, BigInteger initNonce) {
         BigInteger nonce = initNonce;
         while (true) {

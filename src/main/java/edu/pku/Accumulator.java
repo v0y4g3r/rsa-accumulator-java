@@ -6,7 +6,6 @@ import java.util.Map;
 
 /**
  * @author Lei, HUANG (lhuang@pku.edu.cn): 2019-04-17 19:37:38
- * @see https://github.com/starcoinorg/rsa-accumulator/blob/master/src/main/kotlin/org/starcoin/rsa/Util.kt#L35
  */
 public class Accumulator {
 
@@ -69,17 +68,34 @@ public class Accumulator {
         }
     }
 
+    /**
+     * Iterate data map
+     *
+     * @param x
+     * @return
+     * @author Lei, HUANG (lhuang@pku.edu.cn): 2019-04-17 22:40:13
+     */
     private BigInteger iterateAndGetProduct(BigInteger x) {
         BigInteger product = BigInteger.ONE;
         for (BigInteger k : data.keySet()) {
+            //calculate the product of nonce of elements except x itself
             if (k.compareTo(x) != 0) {
-                BigInteger v = data.get(k);
-                product = product.multiply(Util.hashToPrime(k, ACCUMULATED_PRIME_SIZE, v).getFrist());
+                BigInteger nonce = data.get(k);
+                product = product.multiply(
+                        // only hashed value needed here
+                        Util.hashToPrime(k, ACCUMULATED_PRIME_SIZE, nonce).getFrist());
             }
         }
         return product;
     }
 
+    /**
+     * delete an element from accumulator and return the updated value
+     *
+     * @param x ele to delete
+     * @return updated accumulator value
+     * @author Lei, HUANG (lhuang@pku.edu.cn): 2019-04-17 22:44:51
+     */
     public BigInteger delete(BigInteger x) {
         if (!data.containsKey(x)) {
             return A;
@@ -91,10 +107,31 @@ public class Accumulator {
         }
     }
 
+    /**
+     * use simple modpow calculation to verify element membership
+     *
+     * @param A
+     * @param x
+     * @param proof
+     * @param n
+     * @return
+     * @author Lei, HUANG (lhuang@pku.edu.cn): 2019-04-17 22:45:02
+     */
     private static boolean doVerifyMembership(BigInteger A, BigInteger x, BigInteger proof, BigInteger n) {
         return proof.modPow(x, n).compareTo(A) == 0;
     }
 
+
+    /**
+     * verify element membership
+     *
+     * @param A
+     * @param x
+     * @param nonce
+     * @param proof
+     * @param n
+     * @return true if element x is accumulated by accumulator A, with proof,nonce and
+     */
     public static boolean verifyMembership(
             BigInteger A,
             BigInteger x,
