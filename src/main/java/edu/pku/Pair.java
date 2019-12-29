@@ -1,7 +1,7 @@
 package edu.pku;
 
 public class Pair<T> {
-    private T frist;
+    private T first;
 
     public T getSecond() {
         return second;
@@ -15,22 +15,22 @@ public class Pair<T> {
     private T second;
 
     public Pair(T frist, T second) {
-        this.frist = frist;
+        this.first = frist;
         this.second = second;
     }
 
-    public T getFrist() {
-        return frist;
+    public T getFirst() {
+        return first;
     }
 
-    public Pair<T> setFrist(T frist) {
-        this.frist = frist;
+    public Pair<T> setFirst(T frist) {
+        this.first = frist;
         return this;
     }
 
     @Override public String toString() {
         final StringBuilder sb = new StringBuilder("Pair{");
-        sb.append("frist=").append(frist);
+        sb.append("frist=").append(first);
         sb.append(", second=").append(second);
         sb.append('}');
         return sb.toString();

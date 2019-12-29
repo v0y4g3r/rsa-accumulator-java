@@ -22,7 +22,7 @@ public class Accumulator {
     public Accumulator() {
         data = new HashMap<>();
         Pair<BigInteger> bigIntegerPair = Util.generateTwoLargeDistinctPrimes(RSA_PRIME_SIZE);
-        BigInteger       p              = bigIntegerPair.getFrist();
+        BigInteger       p              = bigIntegerPair.getFirst();
         BigInteger       q              = bigIntegerPair.getSecond();
         N = p.multiply(q);
         random = new EnhancedRandom();
@@ -51,7 +51,7 @@ public class Accumulator {
             return A;
         } else {
             Pair<BigInteger> bigIntegerPair = Util.hashToPrime(x, ACCUMULATED_PRIME_SIZE);
-            BigInteger       hashPrime      = bigIntegerPair.getFrist();
+            BigInteger       hashPrime      = bigIntegerPair.getFirst();
             BigInteger       nonce          = bigIntegerPair.getSecond();
             A = A.modPow(hashPrime, N);
             data.put(x, nonce);
@@ -83,7 +83,7 @@ public class Accumulator {
                 BigInteger nonce = data.get(k);
                 product = product.multiply(
                         // only hashed value needed here
-                        Util.hashToPrime(k, ACCUMULATED_PRIME_SIZE, nonce).getFrist());
+                        Util.hashToPrime(k, ACCUMULATED_PRIME_SIZE, nonce).getFirst());
             }
         }
         return product;
@@ -139,6 +139,6 @@ public class Accumulator {
             BigInteger proof,
             BigInteger n
                                           ) {
-        return doVerifyMembership(A, Util.hashToPrime(x, ACCUMULATED_PRIME_SIZE, nonce).getFrist(), proof, n);
+        return doVerifyMembership(A, Util.hashToPrime(x, ACCUMULATED_PRIME_SIZE, nonce).getFirst(), proof, n);
     }
 }
